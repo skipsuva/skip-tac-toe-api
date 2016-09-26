@@ -1,8 +1,9 @@
 class V1::GamesController < ApplicationController
+  ActionController::Parameters.permit_all_parameters = true
 
   # POST
   def create
-    player = Player.create!(name: params[:player_name])
+    player = Player.create!(name: params[:player_initials])
 
     @game = Game.create!(
       user_id: player.id,
