@@ -30,6 +30,9 @@ class V1::GamesController < ApplicationController
   def player_move
     @game = Game.find(params[:id])
 
+    @game.game_data[params[:player_move]] = "O"
+    @game.save!
+
     # send game to calculator object
     render json: @game
   end
