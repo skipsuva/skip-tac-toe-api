@@ -13,16 +13,17 @@ class HandlePlayerMove
   def execute
     record_player_move
     check_game_board
-    record_computer_move
+    unless game.is_complete?
+      record_computer_move
+      check_game_board
+    end
   end
 
 
   private
 
   def record_player_move
-    game.game_data[player_move_position] = "O"
-    game.player_move_count += 1
-    game.save!
+    game.make_player_move!(player_move_position)
   end
 
   def check_game_board
@@ -30,7 +31,7 @@ class HandlePlayerMove
   end
 
   def record_computer_move
-    #
+    HandleComputerMove.new(game.id).execute
   end
 
   def check_top_row

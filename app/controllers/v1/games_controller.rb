@@ -31,7 +31,6 @@ class V1::GamesController < ApplicationController
     @game = Game.find(params[:id])
     player_move = params[:player_move]
 
-    # send game to calculator object
     HandlePlayerMove.new(@game.id, player_move).execute
 
     render json: @game

@@ -14,15 +14,30 @@ class Game < ActiveRecord::Base
     }
   end
 
+  def make_player_move!(player_move_position)
+    self.game_data[player_move_position] = "O"
+    self.player_move_count += 1
+    self.save!
+  end
+
+  def make_computer_move!(computer_move_position)
+    self.game_data[computer_move_position] = "X"
+    self.save!
+  end
+
   def player_won!
-    update!(player_won: true, is_stalemate: false)
+    self.update!(player_won: true, is_stalemate: false)
   end
 
   def computer_won!
-    update!(player_won: false, is_stalemate: false)
+    self.update!(player_won: false, is_stalemate: false)
   end
 
   def is_stalemate!
-    update!(is_stalemate: true) if player_won == nil
+    self.update!(is_stalemate: true) if player_won == nil
+  end
+
+  def is_complete?
+    self.player_won != nil || self.is_stalemate != nil
   end
 end
