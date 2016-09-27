@@ -1,15 +1,19 @@
 class HandlePlayerMove
 
-  attr_reader :game, :player_move_position
+  attr_reader :game, :game_board, :player_move_position
+
+  BOARD_CHECK_METHODS = [:check_top_row, :check_middle_row, :check_last_row, :check_first_column, :check_second_column, :check_third_column, :check_first_diag, :check_second_diag, :check_stalemate]
 
   def initialize(game_id, player_move)
     @game = Game.find(game_id)
+    @game_board = game.game_data
     @player_move_position = player_move
   end
 
-  execute do
+  def execute
     record_player_move
-    determine_next_event
+    check_game_board
+    record_computer_move
   end
 
 
@@ -17,101 +21,93 @@ class HandlePlayerMove
 
   def record_player_move
     game.game_data[player_move_position] = "O"
-    game.player_move_count ++
+    game.player_move_count += 1
     game.save!
   end
 
-  def determine_next_event
-    game_status = check_game_board
-
-
-
-  end
-
   def check_game_board
-    game_board = game.game_data
-
-    # loop through check methods?
+    BOARD_CHECK_METHODS.each { |method| self.send(method) }
   end
 
-
-
+  def record_computer_move
+    #
+  end
 
   def check_top_row
-    if game_board[:row_1_col_1] == "O" && game_board[:row_1_col_2] == "O" && game_board[:row_1_col_3] == "O"
+    if game_board["row_1_col_1"] == "O" && game_board["row_1_col_2"] == "O" && game_board["row_1_col_3"] == "O"
       game.player_won!
     end
-    if game_board[:row_1_col_1] == "X" && game_board[:row_1_col_2] == "X" && game_board[:row_1_col_3] == "X"
+    if game_board["row_1_col_1"] == "X" && game_board["row_1_col_2"] == "X" && game_board["row_1_col_3"] == "X"
         game.computer_won!
     end
   end
 
   def check_middle_row
-    if game_board[:row_2_col_1] == "O" && game_board[:row_2_col_2] == "O" && game_board[:row_2_col_3] == "O"
+    if game_board["row_2_col_1"] == "O" && game_board["row_2_col_2"] == "O" && game_board["row_2_col_3"] == "O"
       game.player_won!
     end
-    if game_board[:row_2_col_1] == "X" && game_board[:row_2_col_2] == "X" && game_board[:row_2_col_3] == "X"
+    if game_board["row_2_col_1"] == "X" && game_board["row_2_col_2"] == "X" && game_board["row_2_col_3"] == "X"
       game.computer_won!
     end
   end
 
-  def check_middle_row
-    if game_board[:row_3_col_1] == "O" && game_board[:row_3_col_2] == "O" && game_board[:row_3_col_3] == "O"
+  def check_last_row
+    if game_board["row_3_col_1"] == "O" && game_board["row_3_col_2"] == "O" && game_board["row_3_col_3"] == "O"
       game.player_won!
     end
-    if game_board[:row_3_col_1] == "X" && game_board[:row_3_col_2] == "X" && game_board[:row_3_col_3] == "X"
+    if game_board["row_3_col_1"] == "X" && game_board["row_3_col_2"] == "X" && game_board["row_3_col_3"] == "X"
       game.computer_won!
     end
   end
 
   def check_first_column
-    if game_board[:row_1_col_1] == "O" && game_board[:row_2_col_1] == "O" && game_board[:row_3_col_1] == "O"
+    if game_board["row_1_col_1"] == "O" && game_board["row_2_col_1"] == "O" && game_board["row_3_col_1"] == "O"
       game.player_won!
     end
-    if game_board[:row_1_col_1] == "X" && game_board[:row_2_col_1] == "X" && game_board[:row_3_col_1] == "X"
+    if game_board["row_1_col_1"] == "X" && game_board["row_2_col_1"] == "X" && game_board["row_3_col_1"] == "X"
       game.computer_won!
     end
   end
 
   def check_second_column
-    if game_board[:row_1_col_2] == "O" && game_board[:row_2_col_2] == "O" && game_board[:row_3_col_2] == "O"
+    if game_board["row_1_col_2"] == "O" && game_board["row_2_col_2"] == "O" && game_board["row_3_col_2"] == "O"
       game.player_won!
     end
-    if game_board[:row_1_col_2] == "X" && game_board[:row_2_col_2] == "X" && game_board[:row_3_col_2] == "X"
+    if game_board["row_1_col_2"] == "X" && game_board["row_2_col_2"] == "X" && game_board["row_3_col_2"] == "X"
       game.computer_won!
     end
   end
 
   def check_third_column
-    if game_board[:row_1_col_3] == "O" && game_board[:row_2_col_3] == "O" && game_board[:row_3_col_3] == "O"
+    if game_board["row_1_col_3"] == "O" && game_board["row_2_col_3"] == "O" && game_board["row_3_col_3"] == "O"
       game.player_won!
     end
-    if game_board[:row_1_col_3] == "X" && game_board[:row_2_col_3] == "X" && game_board[:row_3_col_3] == "X"
+    if game_board["row_1_col_3"] == "X" && game_board["row_2_col_3"] == "X" && game_board["row_3_col_3"] == "X"
       game.computer_won!
     end
   end
 
   def check_first_diag
-    if game_board[:row_1_col_1] == "O" && game_board[:row_2_col_2] == "O" && game_board[:row_3_col_3] == "O"
+    if game_board["row_1_col_1"] == "O" && game_board["row_2_col_2"] == "O" && game_board["row_3_col_3"] == "O"
       game.player_won!
     end
-    if game_board[:row_1_col_1] == "X" && game_board[:row_2_col_2] == "X" && game_board[:row_3_col_3] == "X"
+    if game_board["row_1_col_1"] == "X" && game_board["row_2_col_2"] == "X" && game_board["row_3_col_3"] == "X"
       game.computer_won!
     end
   end
 
   def check_second_diag
-    if game_board[:row_3_col_1] == "O" && game_board[:row_2_col_2] == "O" && game_board[:row_1_col_3] == "O"
+    if game_board["row_3_col_1"] == "O" && game_board["row_2_col_2"] == "O" && game_board["row_1_col_3"] == "O"
       game.player_won!
     end
-    if game_board[:row_3_col_1] == "X" && game_board[:row_2_col_2] == "X" && game_board[:row_1_col_3] == "X"
+    if game_board["row_3_col_1"] == "X" && game_board["row_2_col_2"] == "X" && game_board["row_1_col_3"] == "X"
       game.computer_won!
     end
   end
 
-  def check_draw
+  def check_stalemate
     if game_board.has_value?("") == false
-      # mark stalemate
+      game.is_stalemate!
     end
   end
 

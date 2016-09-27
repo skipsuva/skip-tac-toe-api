@@ -15,10 +15,14 @@ class Game < ActiveRecord::Base
   end
 
   def player_won!
-    update!(player_won: true)
+    update!(player_won: true, is_stalemate: false)
   end
 
   def computer_won!
-    update!(player_won: false)
+    update!(player_won: false, is_stalemate: false)
+  end
+
+  def is_stalemate!
+    update!(is_stalemate: true) if player_won == nil
   end
 end
