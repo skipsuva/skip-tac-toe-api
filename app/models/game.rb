@@ -14,6 +14,13 @@ class Game < ActiveRecord::Base
     }
   end
 
+  def reset!
+    self.update!(
+      player_move_count: 0,
+      game_data: Game.default_game_data
+    )
+  end
+
   def make_player_move!(player_move_position)
     self.game_data[player_move_position] = "O"
     self.player_move_count += 1

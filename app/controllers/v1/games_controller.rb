@@ -17,11 +17,7 @@ class V1::GamesController < ApplicationController
   # PATCH/PUT
   def reset
     @game = Game.find(params[:id])
-
-    @game.update!(
-      player_move_count: 0,
-      game_data: Game.default_game_data
-    )
+    @game.reset!
 
     render json: @game
   end

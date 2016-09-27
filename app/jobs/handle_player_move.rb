@@ -1,6 +1,6 @@
 class HandlePlayerMove
 
-  attr_reader :game, :game_board, :player_move_position
+  attr_accessor :game, :game_board, :player_move_position
 
   BOARD_CHECK_METHODS = [:check_top_row, :check_middle_row, :check_last_row, :check_first_column, :check_second_column, :check_third_column, :check_first_diag, :check_second_diag, :check_stalemate]
 
@@ -39,7 +39,7 @@ class HandlePlayerMove
       game.player_won!
     end
     if game_board["row_1_col_1"] == "X" && game_board["row_1_col_2"] == "X" && game_board["row_1_col_3"] == "X"
-        game.computer_won!
+      game.computer_won!
     end
   end
 
