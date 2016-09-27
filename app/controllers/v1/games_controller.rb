@@ -29,11 +29,11 @@ class V1::GamesController < ApplicationController
   # PATCH/PUT
   def player_move
     @game = Game.find(params[:id])
-
-    @game.game_data[params[:player_move]] = "O"
-    @game.save!
+    player_move = params[:player_move]
 
     # send game to calculator object
+    HandlePlayerMove.new(@game.id, player_move).execute
+
     render json: @game
   end
 

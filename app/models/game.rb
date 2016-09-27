@@ -13,4 +13,12 @@ class Game < ActiveRecord::Base
       row_3_col_3: ""
     }
   end
+
+  def player_won!
+    update!(player_won: true)
+  end
+
+  def computer_won!
+    update!(player_won: false)
+  end
 end
