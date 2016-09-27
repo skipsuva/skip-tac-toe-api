@@ -28,11 +28,11 @@ class V1::GamesController < ApplicationController
 
   # PATCH/PUT
   def player_move
-    @game = Game.find(params[:id])
     player_move = params[:player_move]
 
-    HandlePlayerMove.new(@game.id, player_move).execute
+    HandlePlayerMove.new(params[:id], player_move).execute
 
+    @game = Game.find(params[:id])
     render json: @game
   end
 
