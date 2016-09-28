@@ -4,6 +4,8 @@ Rails.application.routes.draw do
     post '/create' => 'games#create'
     patch '/reset' => 'games#reset'
     patch '/player_move' => 'games#player_move'
+
+    get '/leaderboard' => 'leaderboards#index'
   end
 
 end

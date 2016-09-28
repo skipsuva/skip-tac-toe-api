@@ -14,6 +14,10 @@ class Game < ActiveRecord::Base
     }
   end
 
+  def self.find_top_games
+    self.where(player_won: true).order(player_move_count: :asc)[0..14]
+  end
+
   def make_player_move!(player_move_position)
     self.game_data[player_move_position] = "O"
     self.player_move_count += 1
