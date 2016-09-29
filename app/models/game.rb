@@ -14,10 +14,20 @@ class Game < ActiveRecord::Base
     }
   end
 
+  def self.find_player_won_games
+    self.where(player_won: true)
+  end
+
+  def randomize_first_move
+    if (rand(1..10) % 2) != 0
+      HandleComputerMove.new(self.id).execute
+    end
+  end
+  
   def reset!
     self.update!(
-      player_move_count: 0,
-      game_data: Game.default_game_data
+    player_move_count: 0,
+    game_data: Game.default_game_data
     )
   end
 
@@ -33,18 +43,25 @@ class Game < ActiveRecord::Base
   end
 
   def player_won!
-    self.update!(player_won: true, is_stalemate: false)
+    self.update!(player_won: true, is_stalemate: false, completed_at: Time.now)
   end
 
   def computer_won!
-    self.update!(player_won: false, is_stalemate: false)
+    self.update!(player_won: false, is_stalemate: false, completed_at: Time.now)
   end
 
   def is_stalemate!
-    self.update!(is_stalemate: true) if player_won == nil
+    self.update!(is_stalemate: true, completed_at: Time.now) if player_won == nil
   end
 
   def is_complete?
     self.player_won != nil || self.is_stalemate != nil
+  end
+
+  def completed_time
+    return if !self.completed_at
+    seconds_to_complete = self.completed_at - self.created_at
+
+    Time.at(seconds_to_complete).utc.strftime("%M:%S")
   end
 end

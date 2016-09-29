@@ -5,21 +5,40 @@ class V1::GamesController < ApplicationController
   def create
     player = Player.create!(name: params[:player_initials])
 
-    @game = Game.create!(
+    @game = Game.new(
       user_id: player.id,
       player_move_count: 0,
       game_data: Game.default_game_data
     )
 
-    render json: @game
+    if @game.save
+
+      @game.randomize_first_move
+      @game.reload
+
+      render json: @game, status: 201
+    else
+      render json: { errors: @game.errors }, status: 500
+    end
   end
 
   # PATCH/PUT
   def reset
     @game = Game.find(params[:id])
+<<<<<<< HEAD
     @game.reset!
+=======
 
-    render json: @game
+    if @game.update!(player_move_count: 0, game_data: Game.default_game_data, created_at: Time.now)
+
+      @game.randomize_first_move
+      @game.reload
+>>>>>>> master
+
+      render json: @game, status: 200
+    else
+      render json: { errors: @game.errors }, status: 500
+    end
   end
 
   # PATCH/PUT
@@ -29,7 +48,12 @@ class V1::GamesController < ApplicationController
     HandlePlayerMove.new(params[:id], player_move).execute
 
     @game = Game.find(params[:id])
-    render json: @game
+
+    if @game
+      render json: @game, status: 200
+    else
+      render json: { errors: @game.errors }, status: 500
+    end
   end
 
 

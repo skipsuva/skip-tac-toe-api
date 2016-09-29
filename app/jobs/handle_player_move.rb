@@ -11,6 +11,7 @@ class HandlePlayerMove
   def execute
     record_player_move
     check_game_board
+    @game.reload
     unless game.is_complete?
       record_computer_move
       check_game_board
