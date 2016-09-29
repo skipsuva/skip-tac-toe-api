@@ -1,24 +1,5 @@
-# README
+# Skip Tac Toe (API)
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is the API that feeds the [React & AltJS client-side app](https://github.com/skipsuva/skip-tac-toe-client) for Skip Tac Toe.
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Head over to [skip-tac-toe.com](http://skip-tac-toe.com/) to see it in action, or clone/fork, `bundle install`, `rails s`, and then follow the directions on the client-side app.
