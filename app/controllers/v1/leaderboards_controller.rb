@@ -4,8 +4,11 @@ class V1::LeaderboardsController < ApplicationController
   # GET
   def index
     @games = CompileLeaderboard.new().execute
-
-    render json: @games
+    if @games
+      render json: @games, status: 200
+    else
+      render json: { errors: @games.errors }, status: 500
+    end
   end
 
 end
