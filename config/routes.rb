@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get'/' => 'v1/leaderboards#index'
+
   namespace :v1 do
     post '/create' => 'games#create'
     patch '/reset' => 'games#reset'
