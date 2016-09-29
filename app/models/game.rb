@@ -14,8 +14,8 @@ class Game < ActiveRecord::Base
     }
   end
 
-  def self.find_top_games
-    self.where(player_won: true).order(player_move_count: :asc)[0..14]
+  def self.find_player_won_games
+    self.where(player_won: true)
   end
 
   def make_player_move!(player_move_position)
@@ -30,18 +30,25 @@ class Game < ActiveRecord::Base
   end
 
   def player_won!
-    self.update!(player_won: true, is_stalemate: false)
+    self.update!(player_won: true, is_stalemate: false, completed_at: Time.now)
   end
 
   def computer_won!
-    self.update!(player_won: false, is_stalemate: false)
+    self.update!(player_won: false, is_stalemate: false, completed_at: Time.now)
   end
 
   def is_stalemate!
-    self.update!(is_stalemate: true) if player_won == nil
+    self.update!(is_stalemate: true, completed_at: Time.now) if player_won == nil
   end
 
   def is_complete?
     self.player_won != nil || self.is_stalemate != nil
+  end
+
+  def completed_time
+    return if !self.completed_at
+    seconds_to_complete = self.completed_at - self.created_at
+
+    Time.at(seconds_to_complete).utc.strftime("%M:%S")
   end
 end

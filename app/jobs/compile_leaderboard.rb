@@ -3,7 +3,7 @@ class CompileLeaderboard
   attr_reader :games
 
   def initialize
-    @games = Game.find_top_games
+    @games = Game.find_player_won_games
   end
 
   def execute
@@ -14,11 +14,19 @@ class CompileLeaderboard
   private
 
   def compile_response
-    objects = games.map do |game|
-      { name: Player.find(game.user_id).name, player_move_count: game.player_move_count }
+    filtered_games = sort_fastest_winners[0..14]
+
+    objects = filtered_games.map do |game|
+      { name: Player.find(game.user_id).name, player_win_time: game.completed_time }
     end
 
     objects
+  end
+
+  def sort_fastest_winners
+    games.sort_by do |game|
+      game.completed_time
+    end
   end
 
 end
