@@ -12,6 +12,10 @@ class V1::GamesController < ApplicationController
     )
 
     if @game.save
+
+      @game.randomize_first_move
+      @game.reload
+
       render json: @game, status: 201
     else
       render json: { errors: @game.errors }, status: 500
@@ -23,6 +27,10 @@ class V1::GamesController < ApplicationController
     @game = Game.find(params[:id])
 
     if @game.update!(player_move_count: 0, game_data: Game.default_game_data, created_at: Time.now)
+
+      @game.randomize_first_move
+      @game.reload
+
       render json: @game, status: 200
     else
       render json: { errors: @game.errors }, status: 500

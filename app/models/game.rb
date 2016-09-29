@@ -18,6 +18,12 @@ class Game < ActiveRecord::Base
     self.where(player_won: true)
   end
 
+  def randomize_first_move
+    if (rand(1..10) % 2) != 0
+      HandleComputerMove.new(self.id).execute
+    end
+  end
+
   def make_player_move!(player_move_position)
     self.game_data[player_move_position] = "O"
     self.player_move_count += 1
