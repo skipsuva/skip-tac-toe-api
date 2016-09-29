@@ -25,15 +25,12 @@ class V1::GamesController < ApplicationController
   # PATCH/PUT
   def reset
     @game = Game.find(params[:id])
-<<<<<<< HEAD
     @game.reset!
-=======
 
     if @game.update!(player_move_count: 0, game_data: Game.default_game_data, created_at: Time.now)
 
       @game.randomize_first_move
       @game.reload
->>>>>>> master
 
       render json: @game, status: 200
     else
