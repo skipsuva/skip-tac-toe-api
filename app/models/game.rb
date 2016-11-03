@@ -55,6 +55,6 @@ class Game < ActiveRecord::Base
     return if !self.completed_at
     seconds_to_complete = self.completed_at - self.created_at
 
-    Time.at(seconds_to_complete).utc.strftime("%M:%S")
+    Time.at(seconds_to_complete).utc.strftime("%M:%S.%L")
   end
 end
