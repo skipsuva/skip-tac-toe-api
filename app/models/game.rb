@@ -23,7 +23,7 @@ class Game < ActiveRecord::Base
       HandleComputerMove.new(self.id).execute
     end
   end
-  
+
   def reset!
     self.update!(
     player_move_count: 0,
@@ -62,6 +62,6 @@ class Game < ActiveRecord::Base
     return if !self.completed_at
     seconds_to_complete = self.completed_at - self.created_at
 
-    Time.at(seconds_to_complete).utc.strftime("%M:%S")
+    Time.at(seconds_to_complete).utc.strftime("%M:%S.%L")
   end
 end
